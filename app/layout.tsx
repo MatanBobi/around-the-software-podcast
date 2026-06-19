@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Heebo } from "next/font/google";
-import { site } from "./lib/config";
+import { site, links } from "./lib/config";
 import "./globals.css";
 
 const heebo = Heebo({
@@ -20,21 +20,29 @@ export const metadata: Metadata = {
     template: `%s · ${site.title}`,
   },
   description: site.description,
-  metadataBase: new URL("https://around-the-software.example"),
+  metadataBase: new URL(site.url),
+  authors: [{ name: site.hosts }],
+  creator: site.hosts,
+  publisher: site.title,
+  alternates: {
+    canonical: "/",
+    types: site.rssUrl
+      ? { "application/rss+xml": site.rssUrl }
+      : undefined,
+  },
   openGraph: {
     title: site.title,
     description: site.description,
     type: "website",
     locale: "he_IL",
-    images: [{ url: site.cover, width: 1080, height: 1080, alt: site.title }],
+    url: site.url,
+    siteName: site.title,
   },
   twitter: {
     card: "summary_large_image",
     title: site.title,
     description: site.description,
-    images: [site.cover],
   },
-  alternates: site.rssUrl ? { types: { "application/rss+xml": site.rssUrl } } : undefined,
 };
 
 export default function RootLayout({
@@ -42,9 +50,33 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "PodcastSeries",
+    name: site.title,
+    alternateName: site.titleEn,
+    description: site.description,
+    url: site.url,
+    inLanguage: site.locale,
+    image: new URL(site.cover, site.url).toString(),
+    webFeed: site.rssUrl,
+    author: site.hosts.split("&").map((name) => ({
+      "@type": "Person",
+      name: name.trim(),
+    })),
+    sameAs: [links.spotify, links.applePodcasts, links.rss].filter(Boolean),
+  };
+
   return (
     <html lang="he" dir="rtl" className={heebo.variable}>
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

@@ -10,6 +10,7 @@ export const site = {
   description:
     "מסביב לתוכנה הוא פודקאסט ישראלי שבו מתן בורנקראוט וטל יפה מדברים על הצד האנושי של העבודה בהייטק — לא על הקוד עצמו, אלא על כל מה שסביבו: סופט-סקילז, יחסים עם מנהלים וקולגות, ניווט בקריירה, ראיונות עבודה, דינמיקות צוות והתמודדויות יומיומיות מהמשרד.",
   locale: "he-IL",
+  url: "https://around-the-software.com",
   spotifyShowId: "2YQ1HQeUKYH4SduDuH1AAO",
   rssUrl: "https://anchor.fm/s/c9baaf58/podcast/rss",
   cover: "/around-full-size.png",
