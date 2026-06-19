@@ -78,16 +78,43 @@ img {
 }
 
 .eyebrow {
+  position: relative;
   display: inline-block;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 0.85rem;
-  letter-spacing: 0.04em;
-  color: var(--indigo);
-  background: var(--surface-strong);
-  border: 1px solid var(--border);
-  padding: 6px 14px;
-  border-radius: 999px;
-  margin-bottom: 18px;
+  letter-spacing: 0.01em;
+  color: var(--indigo-deep);
+  background: var(--surface);
+  /* Slightly irregular radius + hard offset shadow to echo the
+     hand-drawn comic speech bubble on the cover art. */
+  border: 2px solid var(--ink);
+  padding: 7px 16px;
+  border-radius: 15px 16px 13px 17px;
+  margin-bottom: 22px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.eyebrow::before,
+.eyebrow::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 22px;
+  width: 0;
+  height: 0;
+  border-inline-start: 8px solid transparent;
+  border-inline-end: 8px solid transparent;
+}
+
+/* Ink outline of the bubble tail */
+.eyebrow::before {
+  bottom: -12px;
+  border-top: 12px solid var(--ink);
+}
+
+/* Surface fill — sits higher so the ink reads as an outline at the tip */
+.eyebrow::after {
+  bottom: -7px;
+  border-top: 12px solid var(--surface);
 }
 
 .section-title {
@@ -271,9 +298,10 @@ img {
 }
 
 .btn-primary {
-  background: linear-gradient(120deg, var(--indigo), var(--periwinkle));
+  /* Warm coral→pink — keeps the energy without the fiery gold */
+  background: linear-gradient(120deg, var(--coral) 0%, var(--pink) 100%);
   color: #fff;
-  box-shadow: 0 10px 30px -10px rgba(72, 48, 216, 0.8);
+  box-shadow: 0 12px 30px -10px rgba(243, 87, 152, 0.7);
 }
 
 .btn-spotify {
@@ -390,13 +418,56 @@ img {
   transform: translateY(-2px);
 }
 
-.episode-thumb {
+.episode-medallion {
   width: 84px;
   height: 84px;
-  border-radius: 14px;
-  object-fit: cover;
-  border: 1px solid var(--border);
+  /* Slightly irregular radius + ink outline & hard offset shadow, matching
+     the hand-drawn speech-bubble eyebrows for one cohesive comic system. */
+  border-radius: 16px 18px 15px 17px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  color: #fff;
+  border: 2px solid var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    3px 3px 0 var(--ink);
+}
+
+.episode-medallion-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  opacity: 0.9;
+  margin-bottom: 3px;
+}
+
+.episode-medallion-num {
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Variants sampled from the campfire cover palette */
+.episode-medallion[data-variant="0"] {
+  background: linear-gradient(140deg, var(--indigo), var(--periwinkle));
+}
+.episode-medallion[data-variant="1"] {
+  background: linear-gradient(140deg, var(--pink), #c8367a);
+}
+.episode-medallion[data-variant="2"] {
+  background: linear-gradient(140deg, var(--teal), #3f7d73);
+}
+.episode-medallion[data-variant="3"] {
+  background: linear-gradient(140deg, var(--gold), var(--coral));
+  color: var(--ink);
+}
+.episode-medallion[data-variant="4"] {
+  background: linear-gradient(140deg, var(--indigo-deep), var(--indigo));
 }
 
 .episode-num {
@@ -482,9 +553,13 @@ img {
   .episode {
     grid-template-columns: auto 1fr;
   }
-  .episode-thumb {
+  .episode-medallion {
     width: 64px;
     height: 64px;
+    border-radius: 14px 15px 13px 16px;
+  }
+  .episode-medallion-num {
+    font-size: 1.2rem;
   }
   .episode-play {
     display: none;
@@ -548,7 +623,8 @@ img {
   gap: clamp(20px, 4vw, 38px);
   align-items: center;
   background:
-    radial-gradient(120% 140% at 100% 0%, rgba(88, 50, 234, 0.14), transparent 55%),
+    radial-gradient(120% 140% at 100% 0%, rgba(88, 50, 234, 0.12), transparent 55%),
+    radial-gradient(95% 130% at 0% 125%, rgba(255, 154, 40, 0.22), transparent 60%),
     var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -566,7 +642,7 @@ img {
   top: 0;
   bottom: 0;
   width: 5px;
-  background: var(--brand-gradient);
+  background: linear-gradient(var(--coral), var(--pink));
 }
 
 .spotlight-art {
@@ -598,10 +674,10 @@ img {
   font-size: 0.8rem;
   letter-spacing: 0.03em;
   color: #fff;
-  background: var(--brand-gradient);
+  background: linear-gradient(120deg, var(--coral), var(--pink));
   padding: 5px 14px;
   border-radius: 999px;
-  box-shadow: 0 8px 20px -10px rgba(88, 50, 234, 0.8);
+  box-shadow: 0 8px 20px -10px rgba(243, 87, 152, 0.85);
 }
 
 .spotlight-title {
@@ -815,7 +891,7 @@ img {
   margin: 0;
   background: none;
   cursor: pointer;
-  border-radius: 14px;
+  border-radius: 16px 18px 15px 17px;
   flex-shrink: 0;
   line-height: 0;
 }
@@ -825,8 +901,8 @@ img {
   inset: 0;
   display: grid;
   place-items: center;
-  border-radius: 14px;
-  background: rgba(21, 18, 58, 0.5);
+  border-radius: 16px 18px 15px 17px;
+  background: rgba(21, 18, 58, 0.55);
   color: #fff;
   opacity: 0;
   transition: opacity 0.2s;

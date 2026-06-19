@@ -9,6 +9,14 @@ import { usePlayer, PlayIcon, PauseIcon } from "./Player";
 
 const PAGE_SIZE = 8;
 
+// Each episode row gets a numbered medallion coloured from the cover's
+// palette, cycling through the variants for visual rhythm down the list.
+const MEDALLION_VARIANTS = 5;
+function medallionVariant(ep: Episode): number {
+  const n = ep.episodeNumber ?? 0;
+  return ((n % MEDALLION_VARIANTS) + MEDALLION_VARIANTS) % MEDALLION_VARIANTS;
+}
+
 function Meta({ ep }: { ep: Episode }) {
   return (
     <div className="episode-meta">
@@ -82,13 +90,20 @@ function EpisodeRow({ ep }: { ep: Episode }) {
         onClick={() => player.play(ep)}
         aria-label={active ? `השהיית הפרק: ${ep.title}` : `האזנה לפרק: ${ep.title}`}
       >
-        <Image
-          className="episode-thumb"
-          src={ep.image || site.cover}
-          alt=""
-          width={84}
-          height={84}
-        />
+        <span
+          className="episode-medallion"
+          data-variant={medallionVariant(ep)}
+          aria-hidden="true"
+        >
+          {ep.episodeNumber != null ? (
+            <>
+              <span className="episode-medallion-label">פרק</span>
+              <span className="episode-medallion-num">{ep.episodeNumber}</span>
+            </>
+          ) : (
+            <span className="episode-medallion-num">♪</span>
+          )}
+        </span>
         <span className="episode-thumb-icon" aria-hidden="true">
           {active ? <PauseIcon /> : <PlayIcon />}
         </span>
